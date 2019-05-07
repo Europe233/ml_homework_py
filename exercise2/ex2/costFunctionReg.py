@@ -1,10 +1,8 @@
-"""返回cost和gradient"""
-
 import numpy as np
 
 from sigmoid import *
 
-def cost(theta,X,y):
+def cost_reg(theta,X,y,lambda_val):
     """返回cost"""
     #样本数m
     m = y.size
@@ -20,10 +18,11 @@ def cost(theta,X,y):
             total_cost -= np.log(1-h_theta[i])
     total_cost = total_cost/m
 
+    total_cost += lambda_val*np.dot(theta[1:],theta[1:])/(2*m)
+
     return total_cost
 
-
-def gradient(theta,X,y):
+def gradient_reg(theta,X,y,lambda_val):
     """返回gradient"""
     #样本数m
     m = y.size
@@ -34,6 +33,8 @@ def gradient(theta,X,y):
     cnt_gradient = np.zeros(theta.shape)
     for i in range(m):
         cnt_gradient += (h_theta[i]-y[i])*X[i,:]
+
+    cnt_gradient += np.r_[0,lambda_val*theta[1:]]
     cnt_gradient = cnt_gradient/m
 
     return cnt_gradient
